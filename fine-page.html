@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fine Calculation - Shubh Library Zone</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        #menu {
+            background-color: var(--primary-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        #menu1 {
+            display: flex;
+        }
+
+        #menu1 a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: background-color 0.3s, transform 0.3s;
+            border-radius: 5px;
+        }
+
+        #menu1 a:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 36px;
+        }
+
+        form {
+            display: grid;
+            gap: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+            margin-top: 40px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <nav id="menu">
+        <div id="logo">SHUBH LIBRARY<span style="color: #ffd700;">ZONE</span></div>
+        <div id="menu1">
+            <a href="index.html">Home</a>
+            <a href="book-available.html">Book Available</a>
+            <a href="add-book.html">Add Book</a>
+            <a href="fine.html">Fine</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>Fine Calculation</h1>
+        <form id="fineForm">
+            <div class="input-group">
+                <label for="bookId">Book ID:</label>
+                <input type="text" id="bookId" name="bookId" required>
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="input-group">
+                <label for="dueDate">Due Date:</label>
+                <input type="date" id="dueDate" name="dueDate" required>
+                <i class="far fa-calendar-alt"></i>
+            </div>
+            <div class="input-group">
+                <label for="returnDate">Return Date:</label>
+                <input type="date" id="returnDate" name="returnDate" required>
+                <i class="far fa-calendar-alt"></i>
+            </div>
+            <button type="submit">Calculate Fine</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <div class="footer">
+        Developed By : SHUBH
+    </div>
+
+    <script>
+        document.getElementById('fineForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const bookId = document.getElementById('bookId').value;
+            const dueDate = new Date(document.getElementById('dueDate').value);
+            const returnDate = new Date(document.getElementById('returnDate').value);
+            const diffTime = Math.abs(returnDate - dueDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            let fine = 0;
+            if (diffDays > 0) {
+                fine = diffDays * 2; // Assuming a fine of $2 per day
+            }
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h2>Fine Details</h2>
+                <p><strong>Book ID:</strong> ${bookId}</p>
+                <p><strong>Days Overdue:</strong> ${diffDays}</p>
+                <p><strong>Fine Amount:</strong> $${fine.toFixed(2)}</p>
+            `;
+            resultDiv.style.opacity = '0';
+            resultDiv.style.display = 'block';
+            setTimeout(() => {
+                resultDiv.style.opacity = '1';
+                resultDiv.style.animation = 'fadeIn 0.5s ease-out';
+            }, 10);
+        });
+    </script>
+</body>
+</html>
